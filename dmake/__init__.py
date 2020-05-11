@@ -1,0 +1,28 @@
+#!/usr/bin/env python
+# encoding: utf-8
+"""
+__init__.py
+
+Created by Pierre-Julien Grizel et al.
+Copyright (c) 2019 NumeriCube. All rights reserved.
+
+DMAKE distributed make module
+"""
+# Python3 rocks :)
+from __future__ import print_function
+from __future__ import unicode_literals
+from __future__ import absolute_import
+from __future__ import division
+
+__author__ = ""
+__copyright__ = "Copyright 2016, NumeriCube"
+__credits__ = ["Pierre-Julien Grizel"]
+__license__ = "CLOSED SOURCE"
+__version__ = "TBD"
+__maintainer__ = "Pierre-Julien Grizel"
+__email__ = "pjgrizel@numericube.com"
+__status__ = "Production"
+
+from .cmd import main
+
+__all__ = ["main"]
