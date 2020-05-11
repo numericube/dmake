@@ -192,9 +192,7 @@ Manage your SWARM cluster (see what's running, inspect logs, etc). Then use ./dm
     subparsers = parser.add_subparsers(
         help="Action to perform on your source tree", dest="command"
     )
-    subparsers.required = (
-        True
-    )  # New in Py3, see https://stackoverflow.com/questions/22990977/why-does-this-argparse-code-behave-differently-between-python-2-and-3
+    subparsers.required = True  # New in Py3, see https://stackoverflow.com/questions/22990977/why-does-this-argparse-code-behave-differently-between-python-2-and-3
     global_items = globals().items()
     sorted(global_items, key=lambda x: x[0])
     for _, command in global_items:

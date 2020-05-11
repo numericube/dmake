@@ -49,7 +49,8 @@ clean-test:
 	rm -fr htmlcov/
 
 lint:
-	flake8 leviathan_serving tests
+	black dmake
+	flake8 --max-line-length=180 dmake tests
 
 test:
 	python setup.py test
