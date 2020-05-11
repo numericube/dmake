@@ -49,31 +49,32 @@ clean-test:
 	rm -fr htmlcov/
 
 lint:
+	sh -c "isort --skip-glob=.tox --combine-star --force-single-line-imports --recursive dmake tests "
 	black dmake
 	flake8 --max-line-length=180 dmake tests
 
 test:
 	python setup.py test
 
-test-all:
-	tox
+# test-all:
+# 	tox
 
 coverage:
-	coverage run --source leviathan_serving setup.py test
+	coverage run --source dmake setup.py test
 	coverage report -m
 	coverage html
 	$(BROWSER) htmlcov/index.html
 
-docs:
-	rm -f docs/leviathan_serving.rst
-	rm -f docs/modules.rst
-	sphinx-apidoc -o docs/ leviathan_serving
-	$(MAKE) -C docs clean
-	$(MAKE) -C docs html
-	$(BROWSER) docs/_build/html/index.html
+# docs:
+# 	rm -f docs/leviathan_serving.rst
+# 	rm -f docs/modules.rst
+# 	sphinx-apidoc -o docs/ leviathan_serving
+# 	$(MAKE) -C docs clean
+# 	$(MAKE) -C docs html
+# 	$(BROWSER) docs/_build/html/index.html
 
-servedocs: docs
-	watchmedo shell-command -p '*.rst' -c '$(MAKE) -C docs html' -R -D .
+# servedocs: docs
+# 	watchmedo shell-command -p '*.rst' -c '$(MAKE) -C docs html' -R -D .
 
 release: clean
 	python setup.py sdist upload
@@ -87,8 +88,6 @@ dist: clean
 install: clean
 	python setup.py install
 
-isort:
-	sh -c "isort --skip-glob=.tox --recursive . "
 #
 # lint:
 # 	flake8 --exclude=.tox

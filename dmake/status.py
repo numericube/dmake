@@ -9,7 +9,10 @@ Copyright (c) 2019 NumeriCube. All rights reserved.
 Status command. Big stuff.
 """
 # Python3 rocks :)
-from __future__ import absolute_import, division, print_function, unicode_literals
+from __future__ import absolute_import
+from __future__ import division
+from __future__ import print_function
+from __future__ import unicode_literals
 
 import distutils
 import distutils.version
@@ -18,8 +21,10 @@ import os
 import re
 import textwrap
 
-from . import base_commands, common
-from .common import bcolors, printc
+from . import base_commands
+from . import common
+from .common import bcolors
+from .common import printc
 
 # pylint: disable=E0401,C0301
 __author__ = ""

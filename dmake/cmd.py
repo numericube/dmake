@@ -10,7 +10,10 @@ This is a Makefile-inspired python script used to build and deploy our container
 in a simple and friendly way.
 
 """
-from __future__ import absolute_import, division, print_function, unicode_literals
+from __future__ import absolute_import
+from __future__ import division
+from __future__ import print_function
+from __future__ import unicode_literals
 
 import argparse
 import inspect
@@ -22,15 +25,13 @@ import sys
 
 from .aws import AWSManager
 from .azure import AzureManager
-from .base_commands import (
-    BaseCommand,
-    BaseSubCommand,
-    Docker,
-    Docker_Compose,
-    Docker_Machine,
-    Shell,
-    Upgrade,
-)
+from .base_commands import BaseCommand
+from .base_commands import BaseSubCommand
+from .base_commands import Docker
+from .base_commands import Docker_Compose
+from .base_commands import Docker_Machine
+from .base_commands import Shell
+from .base_commands import Upgrade
 from .common import bcolors
 from .deploy import Deploy
 from .init import Init
