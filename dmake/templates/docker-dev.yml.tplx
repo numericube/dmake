@@ -1,10 +1,6 @@
 version: '3.4'
 
 services:
-  # myproject-nginx-bare:
-  #   volumes:
-  #     - ./myproject-nginx-bare/conf.d:/etc/nginx/conf.d
-
 
   myproject-front:
     build:

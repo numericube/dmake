@@ -102,7 +102,6 @@ services:
       - db
       - rabbitmq
     depends_on:
-      - db
       - rabbitmq
 
   # Our Django setup worker

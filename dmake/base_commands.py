@@ -318,6 +318,11 @@ class _BaseCommand(object):
         strip_output=True,
     ):
         """Wrapper around os.system
+
+        Keyword arguments:
+        raise_on_error -- will throm an exception if return code is not 0
+        fail_silently -- ignores if failure
+        capture -- return captured string instead of error code
         """
         # Prepare command (pre-expand)
         data = ""

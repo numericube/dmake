@@ -34,7 +34,7 @@ from .base_commands import Shell
 from .base_commands import Upgrade
 from .common import bcolors
 from .deploy import Deploy
-from .init import Init
+from .setup import Setup
 from .release import Release
 from .stack import Stack
 from .status import Status
