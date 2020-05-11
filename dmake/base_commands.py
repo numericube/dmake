@@ -9,10 +9,16 @@ Copyright (c) 2019 NumeriCube. All rights reserved.
 Basic commands for dmake
 """
 # Python3 rocks :)
-from __future__ import print_function
-from __future__ import unicode_literals
-from __future__ import absolute_import
-from __future__ import division
+from __future__ import absolute_import, division, print_function, unicode_literals
+
+import argparse
+import inspect
+import os
+import pprint
+import re
+import sys
+
+from .common import HERE, bcolors, printc
 
 # pylint: disable=E0401,E1101
 __author__ = ""
@@ -23,16 +29,6 @@ __version__ = "TBD"
 __maintainer__ = "Pierre-Julien Grizel"
 __email__ = "pjgrizel@numericube.com"
 __status__ = "Production"
-
-
-import os
-import re
-import sys
-import pprint
-import inspect
-import argparse
-
-from .common import printc, bcolors, HERE
 
 
 def subcommand(method):
@@ -178,7 +174,7 @@ class _BaseCommand(object):
         if not project_root_dir and os.environ.get("PROVISION_DIR"):
             return os.environ["PROVISION_DIR"]
         else:
-            os.environ['PROVISION_DIR'] = ""
+            os.environ["PROVISION_DIR"] = ""
 
         # No PROVISION_DIR? We drill down project until we find docker-compose.yml.
         if not project_root_dir:

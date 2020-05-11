@@ -10,6 +10,14 @@ Tests bootstrap files
 """
 from __future__ import unicode_literals
 
+import contextlib
+import os
+import tempfile
+
+from dmake import make
+
+from .fixtures import dmake_module
+
 __author__ = ""
 __copyright__ = "Copyright 2016, NumeriCube"
 __credits__ = ["Pierre-Julien Grizel"]
@@ -18,13 +26,6 @@ __version__ = "TBD"
 __maintainer__ = "Pierre-Julien Grizel"
 __email__ = "pjgrizel@numericube.com"
 __status__ = "Production"
-
-import tempfile
-import contextlib
-import os
-
-from .fixtures import dmake_module
-from dmake import make
 
 
 def test_import():

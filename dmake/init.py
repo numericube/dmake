@@ -9,10 +9,16 @@ Copyright (c) 2019 NumeriCube. All rights reserved.
 Simple init of dmake-made projects
 """
 # Python3 rocks :)
-from __future__ import print_function
-from __future__ import unicode_literals
-from __future__ import absolute_import
-from __future__ import division
+from __future__ import absolute_import, division, print_function, unicode_literals
+
+import argparse
+import os
+import re
+import shutil
+import textwrap
+
+from . import base_commands
+from .common import HERE, bcolors, printc
 
 # pylint: disable=E0401
 __author__ = ""
@@ -24,14 +30,6 @@ __maintainer__ = "Pierre-Julien Grizel"
 __email__ = "pjgrizel@numericube.com"
 __status__ = "Production"
 
-import os
-import re
-import shutil
-import textwrap
-import argparse
-
-from . import base_commands
-from .common import printc, bcolors, HERE
 
 # ########################################################################## #
 # ####                      BOOTSTRAP NEW PROJECT                       #### #

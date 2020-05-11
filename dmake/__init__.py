@@ -9,10 +9,9 @@ Copyright (c) 2019 NumeriCube. All rights reserved.
 DMAKE distributed make module
 """
 # Python3 rocks :)
-from __future__ import print_function
-from __future__ import unicode_literals
-from __future__ import absolute_import
-from __future__ import division
+from __future__ import absolute_import, division, print_function, unicode_literals
+
+from .cmd import main
 
 __author__ = ""
 __copyright__ = "Copyright 2016, NumeriCube"
@@ -23,6 +22,5 @@ __maintainer__ = "Pierre-Julien Grizel"
 __email__ = "pjgrizel@numericube.com"
 __status__ = "Production"
 
-from .cmd import main
 
 __all__ = ["main"]

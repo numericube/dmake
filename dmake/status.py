@@ -9,10 +9,17 @@ Copyright (c) 2019 NumeriCube. All rights reserved.
 Status command. Big stuff.
 """
 # Python3 rocks :)
-from __future__ import print_function
-from __future__ import unicode_literals
-from __future__ import absolute_import
-from __future__ import division
+from __future__ import absolute_import, division, print_function, unicode_literals
+
+import distutils
+import distutils.version
+import glob
+import os
+import re
+import textwrap
+
+from . import base_commands, common
+from .common import bcolors, printc
 
 # pylint: disable=E0401,C0301
 __author__ = ""
@@ -24,17 +31,6 @@ __maintainer__ = "Pierre-Julien Grizel"
 __email__ = "pjgrizel@numericube.com"
 __status__ = "Production"
 
-
-import os
-import re
-import glob
-import textwrap
-import distutils
-import distutils.version
-
-from . import base_commands
-from .common import printc, bcolors
-from . import common
 
 # ########################################################################## #
 # ####                        Sanity checks                             #### #

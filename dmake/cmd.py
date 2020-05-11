@@ -10,10 +10,33 @@ This is a Makefile-inspired python script used to build and deploy our container
 in a simple and friendly way.
 
 """
-from __future__ import print_function
-from __future__ import unicode_literals
-from __future__ import absolute_import
-from __future__ import division
+from __future__ import absolute_import, division, print_function, unicode_literals
+
+import argparse
+import inspect
+
+# pylint: disable=E0401,C0301
+import os
+import re
+import sys
+
+from .aws import AWSManager
+from .azure import AzureManager
+from .base_commands import (
+    BaseCommand,
+    BaseSubCommand,
+    Docker,
+    Docker_Compose,
+    Docker_Machine,
+    Shell,
+    Upgrade,
+)
+from .common import bcolors
+from .deploy import Deploy
+from .init import Init
+from .release import Release
+from .stack import Stack
+from .status import Status
 
 __author__ = ""
 __copyright__ = "Copyright 2016, NumeriCube"
@@ -24,31 +47,6 @@ __maintainer__ = "Pierre-Julien Grizel"
 __email__ = "pjgrizel@numericube.com"
 __status__ = "Production"
 
-# pylint: disable=E0401,C0301
-import os
-import re
-import sys
-import inspect
-import argparse
-
-
-from .common import bcolors
-from .aws import AWSManager
-from .azure import AzureManager
-from .base_commands import (
-    Docker,
-    Docker_Compose,
-    Docker_Machine,
-    Shell,
-    Upgrade,
-    BaseCommand,
-    BaseSubCommand,
-)
-from .status import Status
-from .deploy import Deploy
-from .stack import Stack
-from .release import Release
-from .init import Init
 
 # ########################################################################## #
 # ####                          MAIN ENTRY POINT                        #### #

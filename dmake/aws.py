@@ -9,10 +9,13 @@ Copyright (c) 2019 NumeriCube. All rights reserved.
 AWS-specific stuff
 """
 # Python3 rocks :)
-from __future__ import print_function
-from __future__ import unicode_literals
-from __future__ import absolute_import
-from __future__ import division
+from __future__ import absolute_import, division, print_function, unicode_literals
+
+import json
+import os
+
+from . import base_commands
+from .common import bcolors, printc
 
 # pylint: disable=E0401
 __author__ = ""
@@ -24,12 +27,6 @@ __maintainer__ = "Pierre-Julien Grizel"
 __email__ = "pjgrizel@numericube.com"
 __status__ = "Production"
 
-
-import os
-import json
-
-from .common import bcolors, printc
-from . import base_commands
 
 # ########################################################################## #
 # ####                          AWS management                          #### #

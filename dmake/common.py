@@ -9,10 +9,12 @@ Copyright (c) 2019 NumeriCube. All rights reserved.
 Common stuff for dmake
 """
 # Python3 rocks :)
-from __future__ import print_function
-from __future__ import unicode_literals
-from __future__ import absolute_import
-from __future__ import division
+from __future__ import absolute_import, division, print_function, unicode_literals
+
+import functools
+import os
+import pkgutil
+import weakref
 
 # pylint: disable=E0401,C0301
 __author__ = ""
@@ -24,11 +26,6 @@ __maintainer__ = "Pierre-Julien Grizel"
 __email__ = "pjgrizel@numericube.com"
 __status__ = "Production"
 
-
-import os
-import pkgutil
-import functools
-import weakref
 
 HERE = os.path.dirname(os.path.realpath(__file__))
 AWSCLI_MINIMUM_VERSION = "1.11.91"
