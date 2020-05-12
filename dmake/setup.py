@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # encoding: utf-8
 """
-setup.py
+config.py
 
 Created by Pierre-Julien Grizel et al.
 Copyright (c) 2019 NumeriCube. All rights reserved.
@@ -20,7 +20,7 @@ import re
 import json
 import shutil
 import textwrap
-import yaml
+from ruamel.yaml import YAML
 
 from . import base_commands
 from .common import HERE
@@ -43,7 +43,7 @@ __status__ = "Production"
 # ########################################################################## #
 
 
-class Setup(base_commands.BaseCommand):
+class Config(base_commands.BaseCommand):
     """Bootstrap a new project. Pass along complimentary options to create a project
     with specific settings. Files are only [OVER]written with the --write option.
     """
@@ -53,7 +53,7 @@ class Setup(base_commands.BaseCommand):
     arguments = (
         {
             "name": ("project_name",),
-            "help": "Name of the project. Normally it's mandatory but may be guessed if some files are already there.",
+            "help": "Name of the project. Optional: can be guessed from directory structure.",
             "action": "store",
             "nargs": "?",
         },

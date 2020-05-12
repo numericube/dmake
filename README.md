@@ -52,9 +52,19 @@ For example, let's create a project and run 3 containers that just wait forever:
 
 You've got an Ubuntu container running and waiting forever. Let's integrate it into our project.
 
-  $ dmake init
+  $ dmake setup
 
 We've now created a 'provision' directory with all the necessary files to have your architecture up and ready.
+You just have to start it right away:
+
+  $ dmake stack start
+
+=> Et voilà.
+
+# TODO
+
+* Migrate from yaml to ruamel.yaml
+
 
 
 Then, from your project's root::
