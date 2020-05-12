@@ -52,7 +52,7 @@ For example, let's create a project and run 3 containers that just wait forever:
 
 You've got an Ubuntu container running and waiting forever. Let's integrate it into our project.
 
-  $ dmake setup
+  $ dmake config
 
 We've now created a 'provision' directory with all the necessary files to have your architecture up and ready.
 You just have to start it right away:
@@ -61,9 +61,16 @@ You just have to start it right away:
 
 => Et voilà.
 
+From there you can make changes to your existing containers and if you want to update your containers according to the current configuration, just execute again:
+
+  $ dmake config
+  $ dmake stack stop
+  $ dmake stack start # (should implement dmake stack restart, sorry)
+
+
 # TODO
 
-* Migrate from yaml to ruamel.yaml
+* Integrate Kubernetes instead of Swarm
 
 
 

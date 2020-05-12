@@ -106,12 +106,16 @@ class _BaseCommand(object):
         )
 
     def get_project_root_dir(self,):
-        """Return root dir for this project (according to git)
+        """Return root dir for this project (according to git).
+        If this is not a git project, return current directory.
         """
         if not os.environ.get("PROJECT_ROOT_DIR"):
-            os.environ["PROJECT_ROOT_DIR"] = self.system(
-                "git rev-parse --show-toplevel", capture=True
-            ).strip()
+            try:
+                os.environ["PROJECT_ROOT_DIR"] = self.system(
+                    "git rev-parse --show-toplevel", capture=True
+                ).strip()
+            except OSError:
+                os.environ["PROJECT_ROOT_DIR"] = os.path.abspath(os.path.curdir)
         return os.environ["PROJECT_ROOT_DIR"]
 
     def get_git_status(self,):

@@ -75,13 +75,16 @@ class Config(base_commands.BaseCommand):
                 "PROJECT_NAME is not set. Pass it as an argument if necessary."
             )
 
-        # List of regexps to replace
-        regexps = ((r"myproject", self.project_name),)
+        # List of regexps to replace.
+        # Actually, we use env vars to make this easier
+        regexps = []
+        for key, value in os.environ.items():
+            regexps.append(("${}".format(key), value, ))
 
         # Open, read, replace
         content = f_source.read()
         for regexp, sub in regexps:
-            content = re.sub(regexp, sub, content)
+            content = content.replace(regexp, sub)
         return content
 
     def container_to_docker_compose(self, container_id):
@@ -212,6 +215,7 @@ class Config(base_commands.BaseCommand):
             self.project_name = os.environ.get("PROJECT_NAME")
             if not self.project_name:
                 self.project_name = os.path.split(os.path.abspath(os.path.curdir))[-1]
+                os.environ["PROJECT_NAME"] = self.project_name
 
         # We may have to create target_dir
         if self.write and not os.path.isdir(self.target_dir):

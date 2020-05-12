@@ -33,6 +33,7 @@ from .base_commands import Docker_Machine
 from .base_commands import Shell
 from .base_commands import Upgrade
 from .common import bcolors
+from .common import printc
 from .deploy import Deploy
 from .config import Config
 from .release import Release
@@ -250,9 +251,12 @@ Manage your SWARM cluster (see what's running, inspect logs, etc). Then use ./dm
 
     # Add common environment variables
     os.environ["DEPLOY_ENV"] = cmd_kwargs["env"]
-    os.environ["GIT_COMMIT"] = cmd_instance.system(
-        "git rev-parse HEAD", capture=True
-    ).strip()
+    try:
+        os.environ["GIT_COMMIT"] = cmd_instance.system(
+            "git rev-parse HEAD", capture=True
+        ).strip()
+    except OSError:
+        printc(bcolors.WARNING, "This directory doesn't seem to be a git repository. Some dmake commands won't work.")
 
     # Execute CLOUD pre-processing and register AWS manager
     if cmd_kwargs["aws"]:
