@@ -47,7 +47,8 @@ class Config(base_commands.BaseCommand):
     """Bootstrap a new project. Pass along complimentary options to create a project
     with specific settings. Files are only [OVER]written with the --write option.
     """
-
+    template_dir = None
+    target_dir = None
     project_name = None
 
     arguments = (
@@ -107,29 +108,32 @@ class Config(base_commands.BaseCommand):
             }
         }
 
-    def update_compose(self, target_dir, env_name, content):
+    def update_compose(self, env_name, content):
         """Force-create/update environment of the given name (write on disk)
 
         env_name -- name of the environment, if None used for top-level (common) env
         content -- the dict or OrderedDict to use for creation.
             Environment can be expanded but not shrunk (no 1st-level key deletion)
         """
+        # Basic YAML structure
+        yaml = YAML()
+        # yaml.indent = 4
+        yaml.indent(mapping=4, sequence=4, offset=2)
+
         # Set filename
         if env_name is None:
-            target_file = os.path.join(target_dir, "docker-compose.yml")
+            target_file = os.path.join(self.target_dir, "docker-compose.yml")
+            template_file = os.path.join(self.template_dir, "docker-compose.yml")
         else:
-            target_file = os.path.join(target_dir, "docker-{}.yml".format(env_name))
+            target_file = os.path.join(self.target_dir, "docker-{}.yml".format(env_name))
+            template_file = os.path.join(self.template_dir, "docker-env.yml")
 
-        # Basic file structure
+        # Basic file structure.
+        # If does not exist, will be copied from template dir.
         if not os.path.isfile(target_file):
-            compose = {
-                'services': {},
-                'version': '3.4',
-                'volumes': {},
-            }
-        else:
-            with open(target_file) as f:
-                compose = yaml.load(f.read())
+            shutil.copyfile(template_file, target_file)
+        with open(target_file) as f:
+            compose = yaml.load(f.read())
 
         # Setup services
         for first_level_key in (
@@ -138,7 +142,7 @@ class Config(base_commands.BaseCommand):
             "volumes",
         ):
             if not first_level_key in compose:
-                compose[first_level_key] = []
+                compose[first_level_key] = {}
             for content_key, content_value in content.get(first_level_key, {}).items():
                 if not content_key in compose[first_level_key]:
                     compose[first_level_key][content_key] = {}
@@ -149,12 +153,12 @@ class Config(base_commands.BaseCommand):
                 compose[first_level_key][content_key].update(content_value)
 
         # Record into the target docker-compose.yml file
-        with open(target_file, "w") as f:
+        with open(target_file, "w") as yaml_f:
             printc(bcolors.INFO, "Writing  {}".format(target_file))
-            f.write(yaml.dump(compose))
+            yaml.dump(compose, yaml_f)
 
 
-    def setup_compose(self, target_dir):
+    def setup_compose(self):
         """List running containers and convert them into services
         """
         # Setup services
@@ -165,20 +169,20 @@ class Config(base_commands.BaseCommand):
             services["services"].update(container)
 
         # Write them back
-        self.update_compose(target_dir, None, services)
+        self.update_compose(None, services)
 
-    def install_templates(self, template_dir, target_dir):
+    def install_templates(self):
         """Install all template files
         """
         # Now let's dig into template_dir and add what matters.
-        for filename in os.listdir(template_dir):
+        for filename in os.listdir(self.template_dir):
             # Skip files not ending with 'tpl'
             if not filename.endswith(".tpl"):
                 continue
 
             # Put each file in its proper place
-            source = os.path.join(template_dir, filename)
-            target = os.path.join(target_dir, filename[:-4])
+            source = os.path.join(self.template_dir, filename)
+            target = os.path.join(self.target_dir, filename[:-4])
             if self.write and os.path.isfile(target):
                 printc(bcolors.WARNING, "Skipping {}".format(target))
                 continue
@@ -197,9 +201,9 @@ class Config(base_commands.BaseCommand):
         """Perform bootstrapping.
         """
         # Basic directories
-        # target_dir = self.get_provision_dir()
-        target_dir = self.get_provision_dir(os.path.abspath(os.path.curdir))
-        template_dir = os.path.join(HERE, "templates")
+        # self.target_dir = self.get_provision_dir()
+        self.target_dir = self.get_provision_dir(os.path.abspath(os.path.curdir))
+        self.template_dir = os.path.join(HERE, "templates")
 
         self.container_to_docker_compose("f9694bd6bfa3")
 
@@ -210,13 +214,13 @@ class Config(base_commands.BaseCommand):
                 self.project_name = os.path.split(os.path.abspath(os.path.curdir))[-1]
 
         # We may have to create target_dir
-        if self.write and not os.path.isdir(target_dir):
-            os.mkdir(target_dir)
+        if self.write and not os.path.isdir(self.target_dir):
+            os.mkdir(self.target_dir)
 
         # Now let's dig into template_dir and add what matters.
-        self.install_templates(template_dir, target_dir)
+        self.install_templates()
 
         # Now let's create docker-compose files for our environments
         # based on running instances
-        self.setup_compose(target_dir)
-        self.update_compose(target_dir, "dev", {})
+        self.setup_compose()
+        self.update_compose("dev", {})
