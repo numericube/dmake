@@ -1,0 +1,59 @@
+#!/usr/bin/env python
+# encoding: utf-8
+"""
+test_config.py
+
+Created by Pierre-Julien Grizel et al.
+Copyright (c) 2016 NumeriCube. All rights reserved.
+
+Test if dmake is able to perform a basic config end-to-end
+"""
+from __future__ import unicode_literals
+
+import os
+
+import dmake
+
+from .fixtures import dmake_module, sandbox_dir
+
+__author__ = ""
+__copyright__ = "Copyright 2016, NumeriCube"
+__credits__ = ["Pierre-Julien Grizel"]
+__license__ = "CLOSED SOURCE"
+__version__ = "TBD"
+__maintainer__ = "Pierre-Julien Grizel"
+__email__ = "pjgrizel@numericube.com"
+__status__ = "Production"
+
+
+def test_basic():
+    """Test if I can call dmake"""
+    # dmake will fail as no command is provided
+    assert os.system("dmake") == 512
+    assert not os.system("dmake --help")
+
+
+def test_sandbox(sandbox_dir):
+    """Test from a sandbox
+    """
+    # Start a few containers
+    os.system("docker run -d --rm --name dmake_test_container1 ubuntu sleep infinity")
+    os.system("docker run -d --rm --name dmake_test_container2 ubuntu sleep infinity")
+    os.system("docker run -d --rm --name dmake_test_container3 ubuntu sleep infinity")
+
+    # Prepare our structure
+    dmake.cmd.main("config")
+
+    # Stop containers
+    os.system("docker stop -t 0 dmake_test_container1")
+    os.system("docker stop -t 0 dmake_test_container2")
+    os.system("docker stop -t 0 dmake_test_container3")
+
+    # Start containers. They should be up and running!
+    dmake.cmd.main("stack", "start", "--detach")
+
+    # Test that our containers are alive
+
+    # Stop 'em all
+    dmake.cmd.main("stack", "stop")
+    dmake.cmd.main("stack", "clean", "-y")

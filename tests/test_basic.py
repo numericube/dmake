@@ -12,7 +12,7 @@ from __future__ import unicode_literals
 
 import os
 
-from dmake import make
+import dmake
 
 from .fixtures import dmake_module
 

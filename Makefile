@@ -54,7 +54,8 @@ lint:
 	flake8 --max-line-length=180 dmake tests
 
 test:
-	python setup.py test
+	py.test
+#	python setup.py test
 
 # test-all:
 # 	tox

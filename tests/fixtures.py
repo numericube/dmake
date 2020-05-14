@@ -16,7 +16,7 @@ import tempfile
 
 import pytest
 
-from dmake import make
+import dmake
 
 __author__ = ""
 __copyright__ = "Copyright 2016, NumeriCube"
@@ -82,6 +82,24 @@ def dmake_module(scope="function"):
 
                 # Now we test content :)
                 assert os.path.isfile("provision/docker-compose.yml")
+
+                # Ok, happy with this, let's proceed
+                yield tmpdirname
+
+@pytest.fixture
+def sandbox_dir(scope="function"):
+    """Test creation of a sandbox dir (not bootstrapped)"""
+    # Create a temp directory where all this shit will happen
+    with context_environ():
+        with tempfile.TemporaryDirectory() as tmpdirname:
+            with context_cd(tmpdirname):
+                # Safety belt
+                os.chdir(tmpdirname)
+                assert os.path.isdir(tmpdirname)
+
+                # Basic file creation
+                with open("README.md", "w") as readme:
+                    readme.write("Sample project dir")
 
                 # Ok, happy with this, let's proceed
                 yield tmpdirname

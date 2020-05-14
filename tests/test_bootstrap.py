@@ -14,7 +14,7 @@ import contextlib
 import os
 import tempfile
 
-from dmake import make
+import dmake
 
 from .fixtures import dmake_module
 

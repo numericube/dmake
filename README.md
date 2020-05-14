@@ -59,7 +59,7 @@ You just have to start it right away:
 
   $ dmake stack start
 
-=> Et voilà.
+=> Et voilà. Your stack is up and running again.
 
 From there you can make changes to your existing containers and if you want to update your containers according to the current configuration, just execute again:
 
