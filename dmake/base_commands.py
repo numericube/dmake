@@ -24,6 +24,7 @@ import sys
 from .common import HERE
 from .common import bcolors
 from .common import printc
+from .common import system
 
 # pylint: disable=E0401,E1101
 __author__ = ""
@@ -328,43 +329,16 @@ class _BaseCommand(object):
         fail_silently -- ignores if failure
         capture -- return captured string instead of error code
         """
-        # Prepare command (pre-expand)
-        data = ""
-        expcommand = os.path.expandvars(command)
-        if description and self.verbose:
-            print(description)
-        if capture_stderr:
-            expcommand = expcommand + " 2>&1"
-        if self.verbose:
-            printc(
-                bcolors.ECHO,
-                "    [{}]$ {}".format(os.path.abspath(os.curdir), expcommand),
-            )
-
-        # Execute
-        if capture:
-            stream = os.popen(expcommand)
-            data = stream.read()
-            ret = stream.close()
-        else:
-            ret = os.system(expcommand)
-
-        # Handle return values
-        if ret and not fail_silently:
-            if not self.verbose:
-                printc(bcolors.ECHO, "    {}".format(expcommand))
-            printc(bcolors.FAIL, "    Command returned {}".format(ret))
-            if self.verbose:
-                printc(bcolors.FAIL, data)
-            if raise_on_error:
-                raise OSError(ret)
-
-        # Return value if we reached here
-        if capture:
-            if strip_output:
-                data = data.strip()
-            return data
-        return ret
+        return system(
+            command,
+            raise_on_error=raise_on_error,
+            fail_silently=fail_silently,
+            description=description,
+            capture=capture,
+            capture_stderr=capture_stderr,
+            strip_output=strip_output,
+            verbose=self.verbose,
+        )
 
     def docker_compose(self, *args, **kwargs):
         """Basic docker-compose execution.

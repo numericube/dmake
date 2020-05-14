@@ -208,8 +208,6 @@ class Config(base_commands.BaseCommand):
         self.target_dir = self.get_provision_dir(os.path.abspath(os.path.curdir))
         self.template_dir = os.path.join(HERE, "templates")
 
-        self.container_to_docker_compose("f9694bd6bfa3")
-
         # Guess project name if not given
         if not self.project_name:
             self.project_name = os.environ.get("PROJECT_NAME")

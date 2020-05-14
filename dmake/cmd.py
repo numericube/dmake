@@ -22,6 +22,8 @@ import inspect
 import os
 import re
 import sys
+import contextlib
+import io
 
 from .aws import AWSManager
 from .azure import AzureManager
@@ -279,7 +281,7 @@ Manage your SWARM cluster (see what's running, inspect logs, etc). Then use ./dm
             os.environ[sh_var] = eval(sh_value)
 
     # Execute command
-    cmd_instance.cmdrun()
+    return cmd_instance.cmdrun()
 
 
 # Let's RUUUUUN!!!

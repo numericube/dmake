@@ -11,6 +11,9 @@ Test if dmake is able to perform a basic config end-to-end
 from __future__ import unicode_literals
 
 import os
+import contextlib
+import io
+import sys
 
 import dmake
 
@@ -24,6 +27,20 @@ __version__ = "TBD"
 __maintainer__ = "Pierre-Julien Grizel"
 __email__ = "pjgrizel@numericube.com"
 __status__ = "Production"
+
+
+
+@contextlib.contextmanager
+def capture_stdout():
+    oldout, olderr = sys.stdout, sys.stderr
+    try:
+        out=[io.StringIO(), io.StringIO()]
+        sys.stdout, sys.stderr = out
+        yield out
+    finally:
+        sys.stdout,sys.stderr = oldout, olderr
+        out[0] = out[0].getvalue()
+        out[1] = out[1].getvalue()
 
 
 def test_basic():
@@ -53,7 +70,24 @@ def test_sandbox(sandbox_dir):
     dmake.cmd.main("stack", "start", "--detach")
 
     # Test that our containers are alive
+    containers = dmake.common.system("docker ps", capture=True).split()
+    project_name = os.path.split(os.path.abspath(os.curdir))[-1]
+    for container_name in (
+        "{}_dmake_test_container1_1".format(project_name),
+        "{}_dmake_test_container2_1".format(project_name),
+        "{}_dmake_test_container3_1".format(project_name),
+    ):
+        assert container_name in containers
 
     # Stop 'em all
     dmake.cmd.main("stack", "stop")
     dmake.cmd.main("stack", "clean", "-y")
+
+    # Check if they're NOT alive anymore
+    containers = dmake.common.system("docker ps", capture=True).split()
+    for container_name in (
+        "{}_dmake_test_container1_1".format(project_name),
+        "{}_dmake_test_container2_1".format(project_name),
+        "{}_dmake_test_container3_1".format(project_name),
+    ):
+        assert container_name not in containers

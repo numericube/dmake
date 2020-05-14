@@ -42,6 +42,60 @@ RECOMMENDED_VARIABLES = {
     "AZURE_SUBSCRIPTION_ID": "(optional, except for Azure) Your Azure subscription id (use `az account list`)",
 }
 
+def system(
+    command,
+    raise_on_error=True,
+    fail_silently=False,
+    description=None,
+    capture=False,
+    capture_stderr=False,
+    strip_output=True,
+    verbose=False,
+):
+    """Wrapper around os.system
+
+    Keyword arguments:
+    raise_on_error -- will throm an exception if return code is not 0
+    fail_silently -- ignores if failure
+    capture -- return captured string instead of error code
+    """
+    # Prepare command (pre-expand)
+    data = ""
+    expcommand = os.path.expandvars(command)
+    if description and verbose:
+        print(description)
+    if capture_stderr:
+        expcommand = expcommand + " 2>&1"
+    if verbose:
+        printc(
+            bcolors.ECHO,
+            "    [{}]$ {}".format(os.path.abspath(os.curdir), expcommand),
+        )
+
+    # Execute
+    if capture:
+        stream = os.popen(expcommand)
+        data = stream.read()
+        ret = stream.close()
+    else:
+        ret = os.system(expcommand)
+
+    # Handle return values
+    if ret and not fail_silently:
+        if not verbose:
+            printc(bcolors.ECHO, "    {}".format(expcommand))
+        printc(bcolors.FAIL, "    Command returned {}".format(ret))
+        if verbose:
+            printc(bcolors.FAIL, data)
+        if raise_on_error:
+            raise OSError(ret)
+
+    # Return value if we reached here
+    if capture:
+        if strip_output:
+            data = data.strip()
+        return data
+    return ret
 
 def memoized_method(*lru_args, **lru_kwargs):
     """See https://stackoverflow.com/questions/33672412/python-functools-lru-cache-with-class-methods-release-object
